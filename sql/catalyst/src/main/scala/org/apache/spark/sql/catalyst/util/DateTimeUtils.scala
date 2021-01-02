@@ -567,6 +567,14 @@ object DateTimeUtils {
   }
 
   /**
+   * Adds a week interval to a date represented as days since 1970-01-01.
+   * @return a date value, expressed in days since 1970-01-01.
+   */
+  def dateAddWeeks(days: Int, weeks: Int): Int = {
+    localDateToDays((daysToLocalDate(days).plusWeeks(weeks)))
+  }
+
+  /**
    * Adds an year-month interval to a date represented as days since 1970-01-01.
    * @return a date value, expressed in days since 1970-01-01.
    */

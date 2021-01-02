@@ -390,6 +390,7 @@ object FunctionRegistry {
     expression[XPathString]("xpath_string"),
 
     // datetime functions
+    expression[AddWeeks]("add_weeks"),
     expression[AddMonths]("add_months"),
     expression[CurrentDate]("current_date"),
     expression[CurrentTimestamp]("current_timestamp"),

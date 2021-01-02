@@ -1445,6 +1445,31 @@ case class ToUTCTimestamp(left: Expression, right: Expression) extends UTCTimest
   override val prettyName: String = "to_utc_timestamp"
 }
 
+
+case class AddWeeks(startDate: Expression, weeks: Expression)
+  extends BinaryExpression with ImplicitCastInputTypes with NullIntolerant {
+
+  override def left: Expression = startDate
+  override def right: Expression = weeks
+
+  override def inputTypes: Seq[AbstractDataType] = Seq(DateType, IntegerType)
+
+  override def dataType: DataType = DateType
+
+  override def nullSafeEval(start: Any, months: Any): Any = {
+    DateTimeUtils.dateAddWeeks(start.asInstanceOf[Int], weeks.asInstanceOf[Int])
+  }
+
+  override def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode = {
+    val dtu = DateTimeUtils.getClass.getName.stripSuffix("$")
+    defineCodeGen(ctx, ev, (st, h) => {
+      s"""$dtu.dateAddWeeks($st, $h)"""
+    })
+  }
+
+  override def prettyName: String = "add_weeks"
+}
+
 /**
  * Returns the date that is num_months after start_date.
  */

@@ -323,6 +323,21 @@ class DateFunctionsSuite extends QueryTest with SharedSparkSession {
         Row(Timestamp.valueOf("2015-12-27 00:00:00"))))
   }
 
+  test("function add_weeks") {
+    val d1 = Date.valueOf("2021-01-04")
+    val d2 = Date.valueOf("2021-01-29")
+    val df = Seq((1, d1), (2, d2)).toDF("n", "d")
+    checkAnswer(
+      df.select(add_weeks(col("d"), lit(1))),
+      Seq(Row(Date.valueOf("2021-01-11")), Row(Date.valueOf("2021-02-05"))))
+    checkAnswer(
+      df.selectExpr("add_weeks(d, -1)"),
+      Seq(Row(Date.valueOf("2020-12-28")), Row(Date.valueOf("2021-01-22"))))
+    checkAnswer(
+      df.withColumn("x", lit(1)).select(add_weeks(col("d"), col("x"))),
+      Seq(Row(Date.valueOf("2021-01-11")), Row(Date.valueOf("2021-02-05"))))
+  }
+
   test("function add_months") {
     val d1 = Date.valueOf("2015-08-31")
     val d2 = Date.valueOf("2015-02-28")
